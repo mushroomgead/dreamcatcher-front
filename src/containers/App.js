@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <div className="App">
         {this.props.counter}
-        <button onClick={() => this.props.dispatch(increment(1))}>
+        <button onClick={() => this.props.onIncrement(1)}>
           ปุ่มบวกนะจ๊ะ กดเลย
         </button>
       </div>
@@ -18,12 +18,12 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log(state, 'satte');
-  
-  return {
-    counter: state.counters || 0
-  }
-}
+const mapStateToProps = (state) => ({  
+  counter: state.counters || 0
+})
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => ({
+  onIncrement: (num) => dispatch(increment(num))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
