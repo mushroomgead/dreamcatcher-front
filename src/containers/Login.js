@@ -37,6 +37,18 @@ class Login extends React.Component {
     password: '',
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.response) {
+      this.props.history.push('/dashboard')
+    } else {
+      alert('invalid username or password')
+    }
+  }
+
+  _goBack = () => {
+    this.props.history.push('/')
+  }
+
   _onInputChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -74,9 +86,9 @@ class Login extends React.Component {
             onClick={this._onClickLogin}
           />
           <ButtonOutlined
-            title="ย้อนกลับ"
+            title="Back"
             style={styles.buttonStyle}
-            // onClick={this._onClickSignup}
+            onClick={this._goBack}
           />
         </Grid>
       </Layout>
@@ -84,9 +96,12 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+  return {
+    response: state.auth.response
+  }
+}
 
-})
 
 const mapDispatchToProps = (dispatch) => ({
   getCredential: (data) => dispatch(getCredential(data))

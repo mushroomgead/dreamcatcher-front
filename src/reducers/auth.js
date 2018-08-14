@@ -1,12 +1,13 @@
 import {
   GET_CREDENTIAL_BEGIN,
   GET_CREDENTIAL_SUCCESS,
-  GET_CREDENTIAL_FAILURE
+  GET_CREDENTIAL_FAILURE,
+  FORCE_LOGOUT_SUCCESS,
 } from '../constants/authTypes'
 
 const initialState = {
-  creadential: [],
-  loading: false,
+  response: [],
+  fetching: false,
   error: null
 }
 
@@ -15,23 +16,26 @@ export default function authReducer(state = initialState, action) {
     case GET_CREDENTIAL_BEGIN:
       return {
         ...state,
-        loading: true,
+        fetching: true,
         error: null,
       }
 
     case GET_CREDENTIAL_SUCCESS:
       return {
         ...state,
-        loading: false,
-        creadential: action.payload.response,
+        fetching: false,
+        response: action.payload.credential.data,
       }
 
     case GET_CREDENTIAL_FAILURE:
       return {
         ...state,
-        loading: false,
+        fetching: false,
         error: action.payload.error,
       }
+
+    case FORCE_LOGOUT_SUCCESS:
+      return state;
 
     default:
       // Always have a default case in reducer

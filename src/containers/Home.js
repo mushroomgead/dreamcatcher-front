@@ -1,8 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 import { Colors } from '../components/base/initial-variables'
+import { loadState } from '../utility/localStorage'
 import { ButtonSmall, ButtonOutlined } from '../components/elements'
 import Logo from '../assets/Images/Logo.png'
+import { forceLogout } from '../actions/authActions'
 
 const styles = {
   buttonStyle: {
@@ -32,10 +36,14 @@ const Grid = styled.div`
   justify-content: ${props => props.position ? props.position : 'flex-start'};
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none
+`
+
 const Body = styled.div`
   width: 100%;
-  height: 800px;
-  background: ${Colors.cyan};
+  height: 1200px;
+  background: -webkit-linear-gradient(#39b0ff,#6dd5fa00);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,35 +74,63 @@ class Home extends React.Component {
     this.props.history.push(`${route}`)
   }
 
+  _logout = () => {
+    this.props.forceLogout()
+    this.props.history.push('/')
+  }
+
+  _renderButtonByAuth = () => {
+    if (loadState('token')) {
+      return <Grid position='flex-end'>
+        <ButtonOutlined
+          onClick={this._logout}
+          title="Logout"
+          style={styles.buttonStyle}
+        />
+      </Grid>
+    }
+    return <Grid position='flex-end'>
+      <ButtonSmall
+        onClick={this._redirect('/login')}
+        title="Login"
+        style={styles.buttonStyle}
+      />
+      <ButtonOutlined
+        onClick={this._redirect('/signup')}
+        title="Signup"
+        style={styles.buttonStyle}
+      />
+    </Grid>
+  }
+
   render() {
     return (
       <Layout>
         <NavBar>
           <Grid>
             <Image />
-            <TextLogo>
-              DREAMCATCHER
-            </TextLogo>
+            <StyledLink to="/" replace>
+              <TextLogo>
+                DREAMCATCHER
+              </TextLogo>
+            </StyledLink>
           </Grid>
-          <Grid position='flex-end'>
-            <ButtonSmall
-              onClick={this._redirect('/login')}
-              title="Login"
-              style={styles.buttonStyle}
-            />
-            <ButtonOutlined
-              onClick={this._redirect('/signup')}
-              title="Signup"
-              style={styles.buttonStyle}
-            />
-          </Grid>
+          {this._renderButtonByAuth()}
         </NavBar>
+        {/* <HeroImage /> */}
         <Body>
-          <Text>HELLO WORLD~</Text>
         </Body>
       </Layout>
     );
   }
 }
 
-export default Home
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  forceLogout: () => dispatch(forceLogout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

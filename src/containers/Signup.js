@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Colors } from '../components/base/initial-variables'
+// import { Colors } from '../components/base/initial-variables'
 import { ButtonSmall, ButtonOutlined, TextInput } from '../components/elements'
 import { createUser } from '../actions/userActions';
 
@@ -39,6 +39,10 @@ class Signup extends React.Component {
     username: '',
   }
 
+  _goBack = () => {
+    this.props.history.push('/')
+  }
+
   _onInputChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -63,6 +67,15 @@ class Signup extends React.Component {
         </Grid>
         <Grid>
           <TextInput
+            type="text"
+            name="username"
+            placeholder="username"
+            value={this.state.username}
+            onChange={this._onInputChange}
+          />
+        </Grid>
+        <Grid>
+          <TextInput
             type="password"
             name="password"
             placeholder="passwords"
@@ -80,24 +93,15 @@ class Signup extends React.Component {
           />
         </Grid>
         <Grid>
-          <TextInput
-            type="text"
-            name="username"
-            placeholder="username"
-            value={this.state.username}
-            onChange={this._onInputChange}
-          />
-        </Grid>
-        <Grid>
           <ButtonSmall
             title="Signup"
             style={styles.buttonStyle}
             onClick={this._onClickSignup}
           />
           <ButtonOutlined
-            title="ย้อนกลับ"
+            title="Back"
             style={styles.buttonStyle}
-            // onClick={this._onClickSignup}
+            onClick={this._goBack}
           />
         </Grid>
       </Layout>

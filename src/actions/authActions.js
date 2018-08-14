@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { API_ENDPOINT } from '../Environment'
 import {
   GET_CREDENTIAL_BEGIN,
   GET_CREDENTIAL_SUCCESS,
   GET_CREDENTIAL_FAILURE,
+  FORCE_LOGOUT_SUCCESS,
 } from '../constants/authTypes';
-
-const ENDPOINT = 'http://localhost:3000'
+import { saveState, clearState } from '../utility/localStorage'
 
 export const getCredentialBegin = () => ({
   type: GET_CREDENTIAL_BEGIN
@@ -21,18 +22,23 @@ export const getCredentialFailure = (error) => ({
   payload: { error }
 })
 
+export const forceLogoutSuccess = () => ({
+  type: FORCE_LOGOUT_SUCCESS
+})
+
 export function getCredential(data) {
   return (dispatch) => {
     dispatch(getCredentialBegin());
     return axios({
       method: 'post',
-      url: ENDPOINT + '/auth/login',
+      url: API_ENDPOINT + '/auth/login',
       data: {
         email: data.email,
         password: data.password,
       }
     })
     .then((response) => {
+      saveState('token', response.data.token)
       dispatch(getCredentialSuccess(response))
     })
     .catch((error) => {
@@ -40,5 +46,12 @@ export function getCredential(data) {
 
       dispatch(getCredentialFailure(error))
     })
+  }
+}
+
+export function forceLogout(){
+  return (dispatch) => {
+    clearState()
+    dispatch(forceLogoutSuccess())
   }
 }
