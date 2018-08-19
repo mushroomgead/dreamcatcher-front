@@ -8,6 +8,8 @@ import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import rootReducer from './reducers';
 
+import './i18n';
+
 const middleware = [logger, thunk]
 const store = createStore(rootReducer, applyMiddleware(...middleware))
 

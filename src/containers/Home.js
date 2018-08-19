@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { I18n, Trans } from 'react-i18next';
+import compose from 'lodash/fp/compose';
 import { Colors } from '../components/base/initial-variables'
 import { loadState } from '../utility/localStorage'
 import { ButtonSmall, ButtonOutlined } from '../components/elements'
@@ -79,7 +81,7 @@ class Home extends React.Component {
     this.props.history.push('/')
   }
 
-  _renderButtonByAuth = () => {
+  _renderButtonByAuth = (t) => {
     if (loadState('token')) {
       return <Grid position='flex-end'>
         <ButtonOutlined
@@ -92,12 +94,12 @@ class Home extends React.Component {
     return <Grid position='flex-end'>
       <ButtonSmall
         onClick={this._redirect('/login')}
-        title="Login"
+        title={t('login')}
         style={styles.buttonStyle}
       />
       <ButtonOutlined
         onClick={this._redirect('/signup')}
-        title="Signup"
+        title={t('signup')}
         style={styles.buttonStyle}
       />
     </Grid>
@@ -105,22 +107,29 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Layout>
-        <NavBar>
-          <Grid>
-            <Image />
-            <StyledLink to="/" replace>
-              <TextLogo>
-                DREAMCATCHER
-              </TextLogo>
-            </StyledLink>
-          </Grid>
-          {this._renderButtonByAuth()}
-        </NavBar>
-        {/* <HeroImage /> */}
-        <Body>
-        </Body>
-      </Layout>
+      <I18n ns="translations">
+        {
+          (t, { i18n }) => (
+            <Layout>
+              <NavBar>
+                <Grid>
+                  <Image />
+                  <StyledLink to="/" replace>
+                    <TextLogo>
+                      DREAMCATCHER
+                    </TextLogo>
+                  </StyledLink>
+                </Grid>
+                {this._renderButtonByAuth(t)}
+                {/* <button onClick={() => i18n.changeLanguage('th')}>th</button>
+                <button onClick={() => i18n.changeLanguage('en')}>en</button> */}
+              </NavBar>
+              <Body>
+              </Body>
+            </Layout>
+          )
+        }
+      </I18n>
     );
   }
 }
