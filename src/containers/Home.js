@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { I18n, Trans } from 'react-i18next';
-import compose from 'lodash/fp/compose';
+import { I18n } from 'react-i18next';
 import { Colors } from '../components/base/initial-variables'
 import { loadState } from '../utility/localStorage'
 import { ButtonSmall, ButtonOutlined } from '../components/elements'
